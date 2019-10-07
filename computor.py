@@ -1,38 +1,48 @@
 #!/usr/bin/env python
+
+# TODO: Detecter le degre de lequation
+# TODO: Resolve equation premier degre
+# TODO: REsolve equation second degre
+# TODO: Gestion cas D'erreurs
+
 import sys
-argv = "- 13 * X^0 = 1.2 * X^0 + 1 * X^1"
+import re
 
-equation = {
-    'polynome': {
-        'x0': 0,
-        'x1': 0,
-        'x2': 0
-    },
-    '=': {
-        'x0': 0,
-        'x1': 0,
-        'x2': 0
-    }
-}
+def change_sign(value):
+	return abs(value) if value <= 0 else -value
 
-i = 0
-argv_elements = argv.split(' ')
-before_equal = True
-while i < len(argv_elements):        
-    if argv_elements[i] == 'X^0':
-        if before_equal:
-            equation['polynome']['x0'] = argv_elements[i - 2]
-            if argv_elements[i - 3] == '-' or argv_elements[i - 3] == '+':
-                equation['polynome']['x0'] = argv_elements[i - 3] + argv_elements[i - 2]
-        else:
-            equation['=']['x0'] = argv_elements[i - 2]
-            if argv_elements[i - 3] == '-' or argv_elements[i - 3] == '+':
-                equation['=']['x0'] = argv_elements[i - 3] + argv_elements[i - 2]
-    if argv_elements[i] == '=':
-        before_equal = False
-    i += 1
+def simplify_equation(old_value, new_value, sign):
+	if sign:
+		new_value = change_sign(new_value)
+	return old_value + new_value
 
-print argv_elements
-print equation
+def parse_input(argv):
+	p = re.compile(r'X\^\d*')
+	equation = dict()
+	elements = argv.split(' ')
+	tmp = ''
+	sign = False
+	for e in elements:
+		if not p.match(e) and e != '*' and e != '=':
+			tmp += e
+		elif e == '=':
+			sign = True 
+		elif p.match(e):
+			key = float(e.split('^')[-1])
+			if equation.get(key):
+				equation[key] = simplify_equation(equation[key], float(tmp), sign)
+			else:
+				if sign:
+					equation[key] = change_sign(float(tmp))
+				else:
+					equation[key] = float(tmp)
+			tmp = ''
+	return equation
+
+# TODO: affichage propre de la forme reduite
+def print_reduced_form(equation):
+	print(equation)
 
 
+equation = parse_input("8 * X^0 - 6 * X^1 + 0 * X^2 - 5.6 * X^3 = 3 * X^0 + 4 * X^4")
+print_reduced_form(equation)

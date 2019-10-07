@@ -1,0 +1,24 @@
+{
+  "name": "Computor_v1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon ./computor.py"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rbejot/Computor_v1.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rbejot/Computor_v1/issues"
+  },
+  "homepage": "https://github.com/rbejot/Computor_v1#readme",
+  "dependencies": {
+    "nodemon": "^1.19.3"
+  }
+}
