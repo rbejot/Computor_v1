@@ -8,10 +8,13 @@
 import sys
 import re
 
-
+# Absolute perso function
 def change_sign(value):
-	return abs(value) if value <= 0 else -value
-
+    return -value
+	# return absolute(value) if value <= 0 else -value
+    
+    # FIXME: ligne dorigine
+    # return abs(value) if value <= 0 else -value
 
 def simplify_equation(old_value, new_value, sign):
 	if sign:
@@ -20,6 +23,7 @@ def simplify_equation(old_value, new_value, sign):
 
 
 def parse_input(argv):
+    # regex
 	p = re.compile(r'X\^\d*')
 	equation = dict()
 	elements = argv.split(' ')
@@ -27,15 +31,20 @@ def parse_input(argv):
 	sign = False
 	for e in elements:
 		if not p.match(e) and e != '*' and e != '=':
+            # stock signe + chiffre dans une string
 			tmp += e
 		elif e == '=':
+            # signe egal detecter, on va changer le signe quand un chiffre est detecte mtn
 			sign = True 
 		elif p.match(e):
+            # on choppe le chiffre dans le dernier index de [X, ^, chiffre]
 			key = int(e.split('^')[-1])
 			if equation.get(key):
+                # si le X correspondant existe alors on simplifie
 				equation[key] = simplify_equation(equation[key], float(tmp), sign)
 			else:
 				if sign:
+                    # si on detecte le X apres '='
 					equation[key] = change_sign(float(tmp))
 				else:
 					equation[key] = float(tmp)
@@ -169,5 +178,5 @@ def process_equation(equation):
 # else:
 # 	exit()
 
-equation = parse_input("- 2 * X^0 - 4 * X^1 = 2 * X^0 - 8 * X^1")
+equation = parse_input("- 2 * X^0 - 4 * X^1 = 2 * X^0 - 4 * X^1")
 process_equation(equation)
